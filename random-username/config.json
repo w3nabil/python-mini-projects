@@ -1,0 +1,8 @@
+{
+    "firstname_limit": 10,
+    "lastname_limit": 10,
+    "username_limit": 10,
+    "chars_should_remain_firtname": 3,
+    "chars_should_remain_lastname": 3,
+    "username_fill_with": "digits"
+}

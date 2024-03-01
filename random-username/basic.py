@@ -1,13 +1,14 @@
 # Basic Python Script to generate random username based on user's firstname and lastname  
 
 import random 
+import json
 
-firstname_limit = 10
-lastname_limit = 10
-username_limit = 10 # Max Limit: 16, Min Limit: 10 ;
-username_end_type = "chars" # "digits", "chars", "mix" 
+firstname_limit = json.load(open("config.json"))["firstname_limit"] 
+lastname_limit = json.load(open("config.json"))["lastname_limit"] 
+username_limit = json.load(open("config.json"))["username_limit"] 
+username_end_type = json.load(open("config.json"))["username_fill_with"]   # diigits, chars, mix
 
-def get_random_name(firstname, lastname):
+def get_random_username(firstname, lastname):
     
     if len(firstname) >= firstname_limit:
         firstname = firstname[:firstname_limit].lower()
@@ -23,11 +24,14 @@ def get_random_name(firstname, lastname):
     chars= "abcdefghijklmnopqrstuvwxyz"
     mix = chars + digits
 
-    short_firstname = firstname[:4]
-    short_lastname = lastname[:4]
+    ch1  = json.load(open("config.json"))["chars_should_remain_firtname"] 
+    ch2  = json.load(open("config.json"))["chars_should_remain_lastname"]
+
+    short_firstname = firstname[:ch1]
+    short_lastname = lastname[:ch2]
     extra_chars = username_limit - len(short_firstname + short_lastname)
 
-    if username_limit <= 16 and username_limit >= 10:
+    if username_limit <= 32 and username_limit >= 6 and username_end_type in ["digits", "chars", "mix"]:
         generated_random = []
         for i in range(extra_chars):
             if username_end_type == "digits":
@@ -41,20 +45,7 @@ def get_random_name(firstname, lastname):
                 generated_random.append(adding)
             else:
                 print("Having some ghost error, ops!")     
-        
         username = short_firstname + short_lastname + "".join(generated_random)
-        
-        # Paste you code here if you want to make it automatic to the database :)) #
-
-        print(f"Username: {username}") # Remove this if you have connected to a database
     else:
-        print("Username limit is not valid")
-
-
-if __name__ == "__main__":
-   firstname = input("Enter your firstname: ")
-   lastname = input("Enter your lastname: ")
-   get_random_name(firstname=firstname, lastname=lastname)
-
-    
-    
+        username = "Error"
+    return username 
